@@ -1,4 +1,15 @@
-# DojoIndex
+# ShadowKick
+
+An Angular-based movie app that provides users with details on various movies, directors, and genres. Users can register, log in, and create a list of their favorite movies. Built with Angular Material and connected to an existing RESTful API.
+
+## Features
+
+- User authentication (registration & login)
+- Browse movies with detailed views
+- View director and genre details
+- Add/remove favorite movies
+- Responsive UI with Angular Material
+- Hosted on GitHub Pages
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.7.
 

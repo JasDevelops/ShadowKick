@@ -14,16 +14,18 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'DojoIndex' title`, () => {
+  it(`should have the 'ShadowKick' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('DojoIndex');
+    expect(app.title).toEqual('ShadowKick');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, DojoIndex');
+    expect(compiled.querySelector('h1')?.textContent).toContain(
+      'Hello, ShadowKick',
+    );
   });
 });
