@@ -1,1 +1,68 @@
-/* You can add global styles to this file, and also import other style files */
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+} /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #010b14;
+  color: #fff;
+  text-align: center;
+}
+h1 {
+  color: #fffb46;
+  text-transform: uppercase;
+  margin: 50px auto;
+}
+
+/* Modal */
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}
+.close-button {
+  position: absolute !important;
+  top: 5px;
+  right: 10px;
+  font-size: 20px;
+  color: #eee;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #999;
+}
+
+.mat-mdc-card-title,
+.mat-mdc-card-subtitle {
+  font-weight: bold !important;
+  color: #010b14 !important;
+  margin-bottom: 15px !important;
+  text-transform: uppercase;
+}
+.mat-mdc-card-actions {
+  justify-content: center;
+}
+
+button {
+  margin: 10px;
+}

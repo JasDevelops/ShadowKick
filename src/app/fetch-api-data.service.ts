@@ -17,9 +17,19 @@ export class FetchApiDataService {
 
   // **User registration**
   public userRegistration(userDetails: any): Observable<any> {
+    console.log('Attempting to register with:', userDetails);
+
     return this.http
-      .post(apiUrl + 'users', userDetails)
-      .pipe(catchError(this.handleError));
+      .post(apiUrl + 'users', userDetails, {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      })
+      .pipe(
+        map((response) => {
+          console.log('Registration successful:', response);
+          return response;
+        }),
+        catchError(this.handleError),
+      );
   }
 
   // **User login (store Token)**
@@ -128,15 +138,36 @@ export class FetchApiDataService {
 
   // **Error Handling**
   private handleError(error: HttpErrorResponse): Observable<never> {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, ` + `body was: ${error.error}`,
-      );
+    console.error('Backend returned status:', error.status);
+    console.error('Full error response:', error);
+
+    let errorMessage = 'Something went wrong; please try again later.';
+
+    if (error.error) {
+      try {
+        let errorBody;
+        if (typeof error.error === 'string') {
+          errorBody = JSON.parse(error.error);
+        } else {
+          errorBody = error.error;
+        }
+
+        console.error('Parsed error body:', errorBody);
+
+        if (typeof errorBody === 'string') {
+          errorMessage = errorBody;
+        } else if (errorBody.message) {
+          errorMessage = errorBody.message;
+        } else if (errorBody.errors && Array.isArray(errorBody.errors)) {
+          errorMessage = errorBody.errors.map((err: any) => err.msg).join('\n');
+        } else {
+          errorMessage = 'An unexpected error occurred.';
+        }
+      } catch (parseError) {
+        console.error('Error parsing backend response:', parseError);
+      }
     }
-    return throwError(
-      () => new Error('Something went wrong; please try again later.'),
-    );
+
+    return throwError(() => new Error(errorMessage));
   }
 }
