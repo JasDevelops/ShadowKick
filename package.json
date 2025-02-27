@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build --prod --base-href '/ShadowKick/' && gh-pages -d dist/ShadowKick"
   },
   "private": true,
   "dependencies": {
@@ -31,6 +32,7 @@
     "@types/jasmine": "~5.1.0",
     "@vitejs/plugin-basic-ssl": "^1.2.0",
     "esbuild": "^0.25.0",
+    "gh-pages": "^6.3.0",
     "jasmine-core": "^5.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
