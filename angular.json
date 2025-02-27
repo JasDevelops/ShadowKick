@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/ShadowKick",
-            "baseHref": "/ShadowKick/",
-            "deployUrl": "/ShadowKick/",
+            "baseHref": "/",
+            "deployUrl": "/",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -48,7 +48,9 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "/ShadowKick/",
+              "deployUrl": "/ShadowKick/"
             },
             "development": {
               "optimization": false,
