@@ -17,63 +17,91 @@ export class FetchApiDataService {
 
   // **User registration**
   public userRegistration(userDetails: any): Observable<any> {
-    console.log('Attempting to register with:', userDetails);
-
     return this.http
       .post(apiUrl + 'users', userDetails, {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       })
       .pipe(
         map((response) => {
-          console.log('Registration successful:', response);
           return response;
         }),
         catchError(this.handleError),
       );
   }
 
-  // **User login (store Token)**
+  // ** User login (store Token and Username) **
   public userLogin(userDetails: any): Observable<any> {
-    return this.http.post(apiUrl + 'login', userDetails).pipe(
-      map((response: any) => {
-        if (response.token) {
-          localStorage.setItem('token', response.token); // Store token after login
-        }
-        return response;
-      }),
-      catchError(this.handleError),
-    );
+    return this.http
+      .post<{
+        token: string;
+        user: { username: string };
+      }>(`${apiUrl}login`, userDetails)
+      .pipe(
+        map((response) => {
+          if (response.token && response.user.username) {
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('username', response.user.username);
+          } else {
+            console.error('Invalid login response:', response);
+          }
+          return response;
+        }),
+        catchError(this.handleError),
+      );
   }
 
-  // Helper: Get authorization headers
+  //Get authorization headers
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || '';
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Error: No token found in localStorage');
+      return new HttpHeaders();
+    }
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     });
   }
 
+  // **Get user data**
+  public getUser(username: string): Observable<any> {
+    return this.http
+      .get(apiUrl + `users/${username}`, { headers: this.getAuthHeaders() })
+      .pipe(map(this.extractResponseData), catchError(this.handleError));
+  }
+  public getUsername(): string | null {
+    const userData = localStorage.getItem('user');
+    try {
+      const parsedUser = JSON.parse(userData || '{}');
+      return parsedUser.username || null;
+    } catch (error) {
+      console.error('Error parsing user data from localStorage:', error);
+      return null;
+    }
+  }
   // **Get all movies**
   public getAllMovies(): Observable<any> {
     return this.http
-      .get(apiUrl + 'movies', { headers: this.getAuthHeaders() })
-      .pipe(map(this.extractResponseData), catchError(this.handleError));
+      .get(`${apiUrl}movies`, { headers: this.getAuthHeaders() })
+      .pipe(catchError(this.handleError));
   }
 
-  // **Get one movie**
-  public getMovie(movieId: string): Observable<any> {
+  // **Get Movie details**
+  public getMovie(title: string): Observable<any> {
     return this.http
-      .get(apiUrl + `movies/${movieId}`, { headers: this.getAuthHeaders() })
-      .pipe(map(this.extractResponseData), catchError(this.handleError));
-  }
-
-  // **Get director**
-  public getDirector(directorName: string): Observable<any> {
-    return this.http
-      .get(apiUrl + `directors/${directorName}`, {
+      .get(`${apiUrl}movies/${encodeURIComponent(title)}`, {
         headers: this.getAuthHeaders(),
       })
-      .pipe(map(this.extractResponseData), catchError(this.handleError));
+      .pipe(catchError(this.handleError));
+  }
+
+  // **Get Director details**
+  public getDirector(name: string): Observable<any> {
+    return this.http
+      .get(`${apiUrl}directors/${encodeURIComponent(name)}`, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(catchError(this.handleError));
   }
 
   // **Get genre**
@@ -83,49 +111,118 @@ export class FetchApiDataService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  // **Get user data**
-  public getUser(): Observable<any> {
-    return this.http
-      .get(apiUrl + 'users', { headers: this.getAuthHeaders() })
-      .pipe(map(this.extractResponseData), catchError(this.handleError));
-  }
-
   // **Get Favorites for a user**
-  public getFavoriteMovies(): Observable<any> {
+  public getUserFavorites(): Observable<any> {
+    const username = this.getUsername();
+    if (!username) {
+      console.error('Error: No username found in localStorage');
+      return throwError(() => new Error('User is not logged in.'));
+    }
+
     return this.http
-      .get(apiUrl + 'users/favorites', { headers: this.getAuthHeaders() })
-      .pipe(map(this.extractResponseData), catchError(this.handleError));
+      .get<{ user: { favourites: any[] } }>(
+        `${apiUrl}users/${encodeURIComponent(username)}`,
+        {
+          headers: this.getAuthHeaders(),
+        },
+      )
+      .pipe(
+        map((response) => {
+          if (!response.user || !Array.isArray(response.user.favourites)) {
+            console.error('Favorites response is not an array:', response);
+            return [];
+          }
+          const updatedUser = JSON.parse(localStorage.getItem('user') || '{}');
+          updatedUser.favourites = response.user.favourites;
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+
+          return response.user.favourites.map((fav) => fav.movieId);
+        }),
+        catchError(this.handleError),
+      );
   }
 
   // **Add to Favorites**
-  public addFavoriteMovie(movieId: string): Observable<any> {
+  public addFavoriteMovie(movieID: string): Observable<any> {
+    const username = this.getUsername();
+    if (!username) {
+      return throwError(() => new Error('User is not logged in.'));
+    }
+
     return this.http
-      .post(
-        apiUrl + `users/favorites/${movieId}`,
+      .put(
+        `${apiUrl}users/${encodeURIComponent(username)}/favourites/${movieID}`,
         {},
         { headers: this.getAuthHeaders() },
       )
       .pipe(catchError(this.handleError));
   }
 
-  // **Edit User**
-  public editUser(updatedDetails: any): Observable<any> {
+  // **Delete Movie from Favorites**
+  public removeFavoriteMovie(movieID: string): Observable<any> {
+    const username = this.getUsername();
+    if (!username) {
+      return throwError(() => new Error('User is not logged in.'));
+    }
+
     return this.http
-      .put(apiUrl + 'users', updatedDetails, { headers: this.getAuthHeaders() })
+      .delete(
+        `${apiUrl}users/${encodeURIComponent(username)}/favourites/${movieID}`,
+        { headers: this.getAuthHeaders() },
+      )
       .pipe(catchError(this.handleError));
+  }
+
+  // **Edit/update User**
+  public updateUser(updatedDetails: any): Observable<any> {
+    const username = this.getUsername();
+    if (!username) {
+      return throwError(() => new Error('User is not logged in.'));
+    }
+
+    return this.http
+      .put<{ user: any }>(
+        `${apiUrl}users/${encodeURIComponent(username)}`,
+        updatedDetails,
+        {
+          headers: this.getAuthHeaders(),
+        },
+      )
+      .pipe(
+        map((response) => {
+          if (response.user) {
+            localStorage.setItem('user', JSON.stringify(response.user));
+
+            if (response.user.username && response.user.username !== username) {
+              localStorage.setItem('username', response.user.username);
+            }
+          }
+          return response;
+        }),
+        catchError(this.handleError),
+      );
   }
 
   // **Delete User**
   public deleteUser(): Observable<any> {
-    return this.http
-      .delete(apiUrl + 'users', { headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
-  }
+    const userData = localStorage.getItem('user');
+    let username: string;
 
-  // **Delete Movie from Favorites**
-  public removeFavoriteMovie(movieId: string): Observable<any> {
+    try {
+      const parsedUser = JSON.parse(userData || '');
+      username = parsedUser.username || parsedUser;
+    } catch (error) {
+      username = userData || ''; // Fallback
+    }
+
+    if (!username || typeof username !== 'string') {
+      return throwError(
+        () => new Error('Invalid username found in local storage'),
+      );
+    }
+
     return this.http
-      .delete(apiUrl + `users/favorites/${movieId}`, {
+      .delete(`${apiUrl}users/${encodeURIComponent(username)}`, {
         headers: this.getAuthHeaders(),
       })
       .pipe(catchError(this.handleError));
@@ -139,7 +236,7 @@ export class FetchApiDataService {
   // **Error Handling**
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Backend returned status:', error.status);
-    console.error('Full error response:', error);
+    console.error('Raw error response:', error.error);
 
     let errorMessage = 'Something went wrong; please try again later.';
 
@@ -147,6 +244,7 @@ export class FetchApiDataService {
       try {
         let errorBody;
         if (typeof error.error === 'string') {
+          console.error('Error is a string:', error.error);
           errorBody = JSON.parse(error.error);
         } else {
           errorBody = error.error;
@@ -158,9 +256,26 @@ export class FetchApiDataService {
           errorMessage = errorBody;
         } else if (errorBody.message) {
           errorMessage = errorBody.message;
-        } else if (errorBody.errors && Array.isArray(errorBody.errors)) {
-          errorMessage = errorBody.errors.map((err: any) => err.msg).join('\n');
-        } else {
+        }
+
+        if (errorBody.errors) {
+          console.error('Validation errors object:', errorBody.errors);
+
+          if (
+            typeof errorBody.errors === 'object' &&
+            !Array.isArray(errorBody.errors)
+          ) {
+            errorMessage = Object.keys(errorBody.errors)
+              .map((field) => `${field}: ${errorBody.errors[field]}`)
+              .join('\n');
+          } else if (Array.isArray(errorBody.errors)) {
+            errorMessage = errorBody.errors
+              .map((err: any) => err.msg || JSON.stringify(err))
+              .join('\n');
+          }
+        }
+
+        if (!errorMessage) {
           errorMessage = 'An unexpected error occurred.';
         }
       } catch (parseError) {

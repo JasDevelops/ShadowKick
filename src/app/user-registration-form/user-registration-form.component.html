@@ -1,33 +1,37 @@
-<mat-card class="registration-card">
-    <mat-card-header>
-        <mat-card-title>Sign up!</mat-card-title>
-        <button mat-icon-button (click)="closeDialog()" class="close-button">✖</button>
-    </mat-card-header>
-    <mat-card-content>
-        <form>
-            <mat-form-field appearance="outline">
-                <mat-label>Username</mat-label>
-                <input matInput [(ngModel)]="userData.username" name="username" placeholder="Enter your username"
-                    required>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Password</mat-label>
-                <input matInput [(ngModel)]="userData.password" name="password" type="password"
-                    placeholder="Enter your password" required>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Email</mat-label>
-                <input matInput [(ngModel)]="userData.email" name="email" type="email" placeholder="Enter your email"
-                    required>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Birthday (optional)</mat-label>
-                <input matInput [(ngModel)]="userData.birthday" name="birthday" type="date"
-                    placeholder="Select your birthday">
-            </mat-form-field>
-        </form>
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-raised-button (click)="registerUser()" color="primary">Sign Up</button>
-    </mat-card-actions>
-</mat-card>
+<div class="tab-content">
+    <h2>Sign Up</h2>
+    <form [attr.aria-label]="'Registration form'">
+        <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput [(ngModel)]="userData.username" name="username" placeholder="Enter your username" required
+                [attr.aria-label]="'Username input'">
+            <mat-icon matSuffix aria-hidden="true">face</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="userData.email" name="email" type="email" placeholder="Enter your email"
+                required [attr.aria-label]="'Email input'">
+            <mat-icon matSuffix aria-hidden="true">email</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="userData.password" name="password"
+                required placeholder="Enter your password" [attr.aria-label]="'Password input'">
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button"
+                [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hidePassword">
+                <mat-icon aria-hidden="true">{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Birthday (optional)</mat-label>
+            <input matInput [(ngModel)]="userData.birthday" name="birthday" type="date"
+                placeholder="Select your birthday" [attr.aria-label]="'Birthday input'">
+            <mat-icon matSuffix aria-hidden="true">event</mat-icon>
+        </mat-form-field>
+    </form>
+    <div class="actions">
+        <button mat-flat-button (click)="registerUser()" color="primary" [attr.aria-label]="'Sign up button'"> Sign Up
+            <mat-icon class="btn-icon" aria-hidden="true">how_to_reg</mat-icon>
+        </button>
+    </div>
+</div>

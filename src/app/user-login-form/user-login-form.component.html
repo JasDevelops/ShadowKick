@@ -1,23 +1,23 @@
-<mat-card class="login-card">
-    <mat-card-header>
-        <mat-card-title>Login</mat-card-title>
-        <button mat-icon-button (click)="closeDialog()" class="close-button">✖</button>
-    </mat-card-header>
-    <mat-card-content>
-        <form>
-            <mat-form-field appearance="outline">
-                <mat-label>Username</mat-label>
-                <input matInput [(ngModel)]="userData.username" name="username" placeholder="Enter your username"
-                    required>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Password</mat-label>
-                <input matInput [(ngModel)]="userData.password" name="password" type="password"
-                    placeholder="Enter your password" required>
-            </mat-form-field>
-        </form>
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-raised-button (click)="loginUser()" color="primary">Login</button>
-    </mat-card-actions>
-</mat-card>
+<!-- Login Tab Content -->
+<div class="login-tab-content">
+    <h2>Log In</h2>
+    <form [attr.aria-label]="'Login form'">
+        <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput [(ngModel)]="userData.username" name="username" placeholder="Enter your username" required
+                [attr.aria-label]="'Username input'" />
+            <mat-icon matSuffix aria-hidden="true">face</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput [(ngModel)]="userData.password" name="password" type="password"
+                placeholder="Enter your password" required [attr.aria-label]="'Password input'" />
+            <mat-icon matSuffix aria-hidden="true">lock</mat-icon>
+        </mat-form-field>
+    </form>
+    <div class="actions">
+        <button mat-flat-button (click)="loginUser()" color="primary" [attr.aria-label]="'Log in button'">Log in
+            <mat-icon class="btn-icon" aria-hidden="true">login</mat-icon>
+        </button>
+    </div>
+</div>

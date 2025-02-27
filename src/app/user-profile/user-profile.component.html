@@ -1,0 +1,76 @@
+<div class="tab-container">
+    <mat-tab-group [attr.aria-label]="'User Profile Tabs'" animationDuration="1000ms">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span>Profile</span>
+            </ng-template>
+            <div class="tab-content profile">
+                <h2>Your Profile</h2>
+                <form (ngSubmit)="updateUserProfile()" [attr.aria-label]="'User profile form'">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Username</mat-label>
+                        <input matInput [(ngModel)]="updatedUser.username" name="username"
+                            [attr.aria-label]="'Username input'" placeholder="{{ user.username }}">
+                        <mat-icon matSuffix aria-hidden="true">mode_edit</mat-icon>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput type="email" [(ngModel)]="updatedUser.email" name="email"
+                            [attr.aria-label]="'Email input'" placeholder="{{ user.email }}">
+                        <mat-icon matSuffix aria-hidden="true">mode_edit</mat-icon>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="updatedUser.password"
+                            [attr.aria-label]="'Password input'" name="password">
+                        <button mat-icon-button matSuffix (click)="hide = !hide" type="button"
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                            <mat-icon aria-hidden="true">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Birthday</mat-label>
+                        <input matInput [(ngModel)]="updatedUser.birthday" name="birthday" type="date"
+                            [attr.aria-label]="'Birthday input'" placeholder="Select your birthday">
+                        <mat-icon matSuffix aria-hidden="true">mode_edit</mat-icon>
+                    </mat-form-field>
+                    <button mat-flat-button color="primary" type="submit" [attr.aria-label]="'Update Profile input'">
+                        Update Profile <mat-icon class="btn-icon" aria-hidden="true">update</mat-icon>
+                    </button>
+                </form>
+                <button mat-stroked-button [attr.aria-label]="'Delete Account'" class="delete-button"
+                    (click)="deleteAccount()"> Delete Account <mat-icon class="btn-icon"
+                        aria-hidden="true">delete</mat-icon>
+                </button>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span>Favorites</span>
+            </ng-template>
+            <div class="tab-content">
+                <h2>Your Favorite Movies</h2>
+                <ul *ngIf="favoriteMovies.length > 0; else noFavorites" class="listbox" cdkListbox
+                    [attr.aria-label]="'Favorite Movies List'">
+                    <li *ngFor="let movie of favoriteMovies">
+                        <a class="clickable" (click)="openMovie(movie)" style="cursor:pointer;"
+                            [attr.aria-label]="'Open details for ' + movie.title">
+                            {{ movie.title }}
+                        </a>
+                        <span class="delete-icon clickable" (click)="removeFromFavorites(movie.movieId)"
+                            [attr.aria-label]="'Remove ' + movie.title + ' from favorites'">
+                            <mat-icon aria-hidden="true">delete</mat-icon>
+                        </span>
+                    </li>
+                </ul>
+                <ng-template #noFavorites>
+                    <mat-icon class="sad_btn" aria-hidden="true">sentiment_very_dissatisfied</mat-icon>
+                    <p class="space">You have no favorite movies yet.<br>Look for some <button routerLink="/movies"
+                            class="home_btn" mat-raised-button [attr.aria-label]="'Go to movies home'">
+                            <mat-icon aria-hidden="true">home</mat-icon> here </button>
+                    </p>
+                </ng-template>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

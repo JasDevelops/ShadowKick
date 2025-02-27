@@ -1,0 +1,43 @@
+.sidenav-container {
+  height: 100vh;
+}
+.sidenav {
+  width: 250px;
+}
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.toolbar {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+.menu-items {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+.menu-items button.active {
+  opacity: 0.5;
+}
+.drawer-header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.left-placeholder {
+  width: 48px;
+}
+.right-placeholder {
+  width: 48px;
+  display: flex;
+  justify-content: flex-end;
+}

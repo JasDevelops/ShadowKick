@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { firstValueFrom } from 'rxjs';
@@ -16,65 +16,57 @@ import { firstValueFrom } from 'rxjs';
   imports: [
     CommonModule,
     FormsModule,
-    MatCardModule,
+    MatTabsModule,
+    MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
   ],
   templateUrl: './user-registration-form.component.html',
-  styleUrls: ['./user-registration-form.component.scss'],
 })
 export class UserRegistrationFormComponent {
+  @Output() registrationSuccess = new EventEmitter<void>();
   userData = { username: '', password: '', email: '', birthday: '' };
+  hidePassword = true;
 
+  // Inject dependencies
   fetchApiData = inject(FetchApiDataService);
-  dialogRef = inject(MatDialogRef<UserRegistrationFormComponent>);
   snackBar = inject(MatSnackBar);
 
+  // Register a new user
   async registerUser(): Promise<void> {
     try {
       const userPayload = { ...this.userData };
-      //birthday is only optional
+      // Handle optional birthday field
       if (userPayload.birthday === '') {
         (userPayload as any).birthday = undefined;
       }
-
       await firstValueFrom(this.fetchApiData.userRegistration(userPayload));
 
-      // Store registration status
+      // Mark user as registered in localStorage
       localStorage.setItem('isRegistered', 'true');
-
-      this.dialogRef.close('registered');
+      // Close dialog and signal registration success
       this.snackBar.open(
         'You have successfully registered! Log in to continue.',
         'OK',
-        { duration: 3000 },
+        { duration: 2000 },
       );
+      this.registrationSuccess.emit();
     } catch (error: any) {
       console.error('Registration failed:', error);
       let errorMessage = 'Registration failed. Please try again.';
 
-      if (typeof error === 'string') {
-        errorMessage = error;
+      if (error.error?.errors) {
+        errorMessage = error.error.errors
+          .map((e: { msg: string }) => e.msg)
+          .join('\n');
+      } else if (typeof error.error === 'string') {
+        errorMessage = error.error;
       } else if (error instanceof Error) {
         errorMessage = error.message;
-      } else if (error.error) {
-        if (typeof error.error === 'string') {
-          errorMessage = error.error;
-        } else if (typeof error.error === 'object' && error.error.message) {
-          errorMessage = error.error.message;
-        } else if (Array.isArray(error.error.errors)) {
-          errorMessage = error.error.errors
-            .map((err: any) => err.msg)
-            .join('\n');
-        }
       }
 
       this.snackBar.open(errorMessage, 'OK', { duration: 4000 });
     }
-  }
-  // Close button x
-  closeDialog(): void {
-    this.dialogRef.close();
   }
 }

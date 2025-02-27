@@ -1,0 +1,41 @@
+<h2 mat-dialog-title class="dialog-title"
+    [attr.aria-label]="'Movie: ' + data.movie.title + ' (' + data.movie.releaseYear + ')'">
+    {{ data.movie.title }} ({{ data.movie.releaseYear }})
+</h2>
+<mat-dialog-content [attr.aria-label]="'Movie details'">
+    <div class="vertical-layout">
+        <div class="image-container">
+            <img [src]="data.movie.image.imageUrl" [attr.alt]="data.movie.title" />
+        </div>
+        <p class="descr">{{ data.movie.description }}</p>
+        <div class="details">
+            <p>
+                <strong>Genre:</strong>
+                <span class="clickable" (click)="openGenreDialog(data.movie.genre)"
+                    [attr.aria-label]="'View genre details for ' + data.movie.genre.name">
+                    {{ data.movie.genre.name }}
+                </span>
+            </p>
+            <p>
+                <strong>Director:</strong>
+                <span class="clickable" (click)="openDirectorDialog(data.movie.director.name)"
+                    [attr.aria-label]="'View director details for ' + data.movie.director.name">
+                    {{ data.movie.director.name }}
+                </span>
+            </p>
+        </div>
+        <div class="listbox-container">
+            <label id="actors-label" class="list_label">Actors</label>
+            <ul cdkListbox [attr.aria-labelledby]="'actors-label'" class="listbox">
+                <li *ngFor="let actor of data.movie.actors">
+                    <strong>{{ actor.name }}</strong> as <span class="actor-role">{{ actor.role }}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close [attr.aria-label]="'Close dialog'"> Close <mat-icon
+            aria-hidden="true">close</mat-icon>
+    </button>
+</mat-dialog-actions>

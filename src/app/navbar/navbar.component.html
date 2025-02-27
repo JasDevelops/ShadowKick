@@ -1,0 +1,45 @@
+<ng-container *ngIf="showNavbar; else noNavbar">
+    <mat-sidenav-container class="sidenav-container" [attr.aria-label]="'Side navigation container'">
+        <mat-sidenav #sidenav mode="over" position="end" [opened]="isSidenavOpen" class="sidenav"
+            [attr.aria-label]="'Side navigation panel'">
+            <ng-container *ngIf="isLoggedIn">
+                <div class="drawer-content">
+                    <mat-toolbar color="accent" class="drawer-header" [attr.aria-label]="'Navigation header'">
+                        <button mat-icon-button (click)="sidenav.toggle()" [attr.aria-label]="'Close navigation'">
+                            <mat-icon aria-hidden="true">close</mat-icon>
+                        </button>
+                    </mat-toolbar>
+                    <div class="menu-items">
+                        <button mat-button routerLink="/movies" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }" (click)="sidenav.close()"
+                            [attr.aria-label]="'Navigate to Home'">
+                            <mat-icon aria-hidden="true">home</mat-icon> Home </button>
+                        <button mat-button routerLink="/profile" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }" (click)="sidenav.close()"
+                            [attr.aria-label]="'Navigate to Profile'">
+                            <mat-icon aria-hidden="true">face</mat-icon> Profile </button>
+                        <button mat-button (click)="logout()" [attr.aria-label]="'Logout'">
+                            <mat-icon aria-hidden="true">logout</mat-icon> Logout </button>
+                    </div>
+                </div>
+            </ng-container>
+        </mat-sidenav>
+        <mat-sidenav-content [attr.aria-label]="'Main content'">
+            <mat-toolbar color="primary" class="toolbar" [attr.aria-label]="'Application toolbar'">
+                <div class="left-placeholder"></div>
+                <span class="logo" [attr.aria-label]="'Application logo'">Shadow<span
+                        class="logo_color">Kick</span></span>
+                <div class="right-placeholder">
+                    <button mat-icon-button class="toggle-button" *ngIf="!sidenav.opened" (click)="sidenav.toggle()"
+                        [attr.aria-label]="'Open navigation'">
+                        <mat-icon aria-hidden="true">{{ sidenav.opened ? 'close' : 'menu' }}</mat-icon>
+                    </button>
+                </div>
+            </mat-toolbar>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</ng-container>
+<ng-template #noNavbar>
+    <router-outlet></router-outlet>
+</ng-template>

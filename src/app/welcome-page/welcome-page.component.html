@@ -1,0 +1,27 @@
+<div class="main-page" [attr.aria-label]="'Main page'">
+    <h1 [attr.aria-label]="'Welcome message'">Welcome to <span class="logo"
+            [attr.aria-label]="'Application logo'">Shadow<span class="logo_color">Kick</span></span></h1>
+    <ng-container *ngIf="!isLoggedIn; else loggedInSection">
+        <div class="tab-container">
+            <mat-tab-group [(selectedIndex)]="selectedTabIndex" mat-align-tabs="center"
+                [attr.aria-label]="'Welcome Tabs'" animationDuration="1000ms">
+                <mat-tab label="Log In">
+                    <ng-template mat-tab-label>
+                        <span>Log in</span>
+                    </ng-template>
+                    <app-user-login-form (loginSuccess)="onLoginSuccess()"></app-user-login-form>
+                </mat-tab>
+                <mat-tab label="Sign Up">
+                    <ng-template mat-tab-label>
+                        <span>Sign up</span>
+                    </ng-template>
+                    <app-user-registration-form
+                        (registrationSuccess)="onRegistrationSuccess()"></app-user-registration-form>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </ng-container>
+    <ng-template #loggedInSection>
+        <button mat-flat-button (click)="logout()" [attr.aria-label]="'Logout'">Logout</button>
+    </ng-template>
+</div>

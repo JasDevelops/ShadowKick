@@ -1,0 +1,21 @@
+<h2 mat-dialog-title [attr.aria-label]="'Genre: ' + data.genre.name">
+    {{ data.genre.name }}
+</h2>
+<mat-dialog-content class="descr" [attr.aria-label]="'Genre description'">
+    <p>{{ data.genre.description }}</p>
+    <div class="listbox-container">
+        <label id="genre-movies-label" class="list_label"> Other {{ data.genre.name }} movies: </label>
+        <ul cdkListbox [attr.aria-labelledby]="'genre-movies-label'" class="listbox">
+            <li *ngFor="let movie of data.genre.movies">
+                <span class="clickable" (click)="openMovie(movie)"
+                    [attr.aria-label]="'Open details for ' + movie.title">
+                    {{ movie.title }} ({{ movie.releaseYear }}) </span>
+            </li>
+        </ul>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close [attr.aria-label]="'Close dialog'"> Close <mat-icon
+            aria-hidden="true">close</mat-icon>
+    </button>
+</mat-dialog-actions>

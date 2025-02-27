@@ -1,0 +1,24 @@
+<h2 mat-dialog-title [attr.aria-label]="'Director: ' + data.director.name">
+    {{ data.director.name }}
+</h2>
+<div>
+    <span>* {{ data.director.birthYear }}</span>
+    <span *ngIf="data.director.deathYear">-{{ data.director.deathYear }}</span>
+</div>
+<mat-dialog-content class="descr" [attr.aria-label]="'Director biography'">
+    <p>{{ data.director.bio }}</p>
+    <div class="listbox-container">
+        <label id="director-movies-label" class="list_label"> Movies by {{ data.director.name }}:</label>
+        <ul cdkListbox [attr.aria-labelledby]="'director-movies-label'" class="listbox">
+            <li *ngFor="let movie of data.director.movies">
+                <span class="clickable" (click)="openMovie(movie)"
+                    [attr.aria-label]="'Open details for ' + movie.title">
+                    {{ movie.title }} ({{ movie.releaseYear }}) </span>
+            </li>
+        </ul>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close [attr.aria-label]="'Close dialog'">Close<mat-icon
+            aria-hidden="true">close</mat-icon></button>
+</mat-dialog-actions>
