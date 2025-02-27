@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "ng build --prod --base-href '/ShadowKick/' && gh-pages -d dist/ShadowKick"
+    "deploy": "ng build --configuration=production --base-href '/ShadowKick/' && gh-pages -d dist/ShadowKick"
   },
   "private": true,
   "dependencies": {
