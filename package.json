@@ -9,6 +9,7 @@
     "test": "ng test",
     "deploy": "ng build --configuration=production --base-href '/ShadowKick/' && gh-pages -d dist/ShadowKick"
   },
+  "homepage": "https://JasDevelops.github.io/ShadowKick",
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.1.0",
