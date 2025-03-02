@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/ShadowKick",
-            "baseHref": "/",
-            "deployUrl": "/",
+            "baseHref": "/ShadowKick/",
+            "deployUrl": "/ShadowKick/",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -50,8 +50,8 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/",
-              "deployUrl": "/",
+              "baseHref": "/ShadowKick/",
+              "deployUrl": "/ShadowKick/",
               "outputPath": "dist/ShadowKick",
               "index": "src/index.html"
             },
@@ -98,7 +98,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "baseHref": "/",
+            "baseHref": "/ShadowKick/",
             "outputPath": "dist/ShadowKick"
           }
         }
