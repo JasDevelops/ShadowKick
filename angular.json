@@ -28,7 +28,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "public",
+                "output": "/"
               }
             ],
             "styles": ["src/styles.scss"],
@@ -49,8 +50,10 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/ShadowKick/",
-              "deployUrl": "/ShadowKick/"
+              "baseHref": "/",
+              "deployUrl": "/",
+              "outputPath": "dist/ShadowKick",
+              "index": "src/index.html"
             },
             "development": {
               "optimization": false,
@@ -84,11 +87,19 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "public",
+                "output": "/"
               }
             ],
             "styles": ["src/styles.scss"],
             "scripts": []
+          }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "baseHref": "/",
+            "outputPath": "dist/ShadowKick"
           }
         }
       }

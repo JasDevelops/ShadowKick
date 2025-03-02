@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "ng build --configuration production --base-href '/ShadowKick/' && gh-pages -d dist/ShadowKick/browser"
+    "deploy": "ng deploy --base-href=/ShadowKick/ --output-path=dist/ShadowKick/"
   },
   "homepage": "https://JasDevelops.github.io/ShadowKick",
   "private": true,
@@ -32,8 +32,8 @@
     "@angular/compiler-cli": "^19.1.0",
     "@types/jasmine": "~5.1.0",
     "@vitejs/plugin-basic-ssl": "^1.2.0",
+    "angular-cli-ghpages": "^2.0.3",
     "esbuild": "^0.25.0",
-    "gh-pages": "^6.3.0",
     "jasmine-core": "^5.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
