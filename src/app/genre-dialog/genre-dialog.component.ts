@@ -32,8 +32,9 @@ export class GenreDialogComponent {
 
   // Open movie details dialog
   openMovie(movie: any): void {
+    console.log('Opening movie:', movie);
     this.dialog.open(MovieDetailsDialogComponent, {
-      data: { movie },
+      data: { movie: movie },
       width: '600px',
     });
     this.dialogRef.close();

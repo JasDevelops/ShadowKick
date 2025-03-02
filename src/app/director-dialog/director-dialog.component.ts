@@ -33,7 +33,7 @@ export class DirectorDialogComponent {
   // Open movie details dialog
   openMovie(movie: any): void {
     this.dialog.open(MovieDetailsDialogComponent, {
-      data: { movie },
+      data: { movie: movie },
       width: '600px',
     });
     this.dialogRef.close();

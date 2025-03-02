@@ -55,19 +55,13 @@ export class WelcomePageComponent {
   }
   // Login
   onLoginSuccess(): void {
-    console.log('🔍 onLoginSuccess() called');
-
     this.checkAuthStatus();
-    console.log('🔍 isLoggedIn after checkAuthStatus:', this.isLoggedIn);
 
     if (this.isLoggedIn) {
-      console.log('✅ User is logged in, navigating to /movies...');
       this.router.navigate(['/movies']).then(() => {
-        console.log('✅ Navigation successful, reloading page...');
         window.location.reload();
       });
     } else {
-      console.log('❌ User is NOT logged in. Navigation will not happen.');
     }
   }
 

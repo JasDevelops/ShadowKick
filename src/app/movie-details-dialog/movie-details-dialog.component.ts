@@ -37,12 +37,16 @@ export class MovieDetailsDialogComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialize component and assign movie data
-    this.movie = this.data.movie;
+    if (typeof this.data.movie.genre === 'string') {
+      this.data.movie.genre = { name: this.data.movie.genre, description: '' };
+      this.movie = this.data.movie;
+    }
   }
 
   // Open genre dialog
   openGenreDialog(genre: any): void {
     this.fetchApiData.getGenre(genre.name).subscribe((genreData) => {
+      console.log('Genre data fetched:', genreData);
       this.dialog.open(GenreDialogComponent, {
         data: { genre: genreData },
         width: '600px',

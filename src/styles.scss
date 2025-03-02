@@ -25,7 +25,8 @@ body {
 
 h1,
 h2,
-h3 {
+h3,
+.list_label {
   font-family: "Fugaz One", serif;
   text-transform: uppercase;
 }
@@ -78,7 +79,7 @@ mat-form-field {
 }
 .clickable {
   cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
+  color: var(--mat-sys-inverse-primary);
 
   &:hover {
     opacity: 0.5;

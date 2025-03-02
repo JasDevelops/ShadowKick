@@ -147,8 +147,6 @@ export class UserProfileComponent implements OnInit {
     ) {
       updatedData.newBirthday = this.updatedUser.birthday;
     }
-    console.log('Updating with:', updatedData);
-
     if (Object.keys(updatedData).length === 0) {
       this.snackBar.open('No changes detected.', 'OK', { duration: 3000 });
       return;

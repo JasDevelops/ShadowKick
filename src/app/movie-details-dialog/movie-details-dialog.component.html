@@ -13,14 +13,14 @@
                 <strong>Genre:</strong>
                 <span class="clickable" (click)="openGenreDialog(data.movie.genre)"
                     [attr.aria-label]="'View genre details for ' + data.movie.genre.name">
-                    {{ data.movie.genre.name }}
+                    {{ data.movie.genre?.name }}
                 </span>
             </p>
             <p>
                 <strong>Director:</strong>
                 <span class="clickable" (click)="openDirectorDialog(data.movie.director.name)"
                     [attr.aria-label]="'View director details for ' + data.movie.director.name">
-                    {{ data.movie.director.name }}
+                    {{ data.movie.director?.name }}
                 </span>
             </p>
         </div>
@@ -28,7 +28,7 @@
             <label id="actors-label" class="list_label">Actors</label>
             <ul cdkListbox [attr.aria-labelledby]="'actors-label'" class="listbox">
                 <li *ngFor="let actor of data.movie.actors">
-                    <strong>{{ actor.name }}</strong> as <span class="actor-role">{{ actor.role }}</span>
+                    <strong>{{ actor.name }}</strong>&nbsp; as &nbsp; <span class="actor-role">{{ actor.role }}</span>
                 </li>
             </ul>
         </div>
