@@ -131,7 +131,7 @@ Please follow the code formatting guidelines and include tests for new features 
 
 ## <a name="license"></a> License:
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [License](./LICENSE) file for details.
 
 ---
 
