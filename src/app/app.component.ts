@@ -2,13 +2,21 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 
+/**
+ * @summary Main app component that acts as the entry point for the Angular application.
+ * @example
+ * @property {string} title The title of the application.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  /**
+   * @property {string} title The title of the application.
+   * @default 'ShadowKick'
+   */
   title = 'ShadowKick';
 }

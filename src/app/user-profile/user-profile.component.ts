@@ -13,6 +13,19 @@ import { CdkListbox } from '@angular/cdk/listbox';
 import { MovieDetailsDialogComponent } from '../movie-details-dialog/movie-details-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
+/**
+ * @summary A component for managing the user's profile, including viewing and updating personal information,
+ *              managing favorite movies, and deleting the account.
+ *
+ * This component allows the user to:
+ * - View their profile data, including username, email, birthday, and favorite movies.
+ * - Update their profile information such as username, email, password, and birthday.
+ * - Remove movies from their favorites.
+ * - Open a dialog to view detailed information about a movie.
+ * - Delete their account permanently.
+ * @example
+ * <app-user-profile></app-user-profile>
+ */
 @Component({
   selector: 'app-user-profile',
   standalone: true,
@@ -30,22 +43,62 @@ import { MatDialog } from '@angular/material/dialog';
   ],
 })
 export class UserProfileComponent implements OnInit {
-  user: any = {}; // Stores user data
-  updatedUser: any = {}; // Stores updated user data for edits
-  favoriteMovies: any[] = []; // List of user's favorite movies
-  hide: boolean = true; // For password visibility
+  /**
+   * @property {any} user - Stores user data.
+   * @default {}
+   */
+  user: any = {};
 
-  // Dependency injection
+  /**
+   * @property {any} updatedUser - Stores updated user data for edits.
+   * @default {}
+   */
+  updatedUser: any = {};
+
+  /**
+   * @property {any[]} favoriteMovies - List of user's favorite movies.
+   * @default []
+   */
+  favoriteMovies: any[] = [];
+
+  /**
+   * @property {boolean} hide - Controls the visibility of the password field.
+   * @default true
+   */
+  hide: boolean = true;
+
+  /**
+   * @property {FetchApiDataService} fetchApiData - Service for interacting with the backend API.
+   */
   fetchApiData = inject(FetchApiDataService);
+
+  /**
+   * @property {Router} router - Router for navigation.
+   */
   router = inject(Router);
+
+  /**
+   * @property {MatSnackBar} snackBar - MatSnackBar for showing feedback to the user.
+   */
   snackBar = inject(MatSnackBar);
+
+  /**
+   * @property {MatDialog} dialog - MatDialog for opening the movie details dialog.
+   */
   dialog = inject(MatDialog);
 
+  /**
+   * @summary Fetches the user's profile from the API.
+   * @returns {void}
+   */
   ngOnInit(): void {
-    // Load user profile on init
     this.getUserProfile();
   }
-  // Fetch user data from API
+
+  /**
+   * @summary Retrieves the user's profile information.
+   * @returns {void}
+   */
   getUserProfile(): void {
     const username = localStorage.getItem('user') || '';
     if (!username) {
@@ -79,7 +132,12 @@ export class UserProfileComponent implements OnInit {
       },
     });
   }
-  // Open movie dialog
+
+  /**
+   * @summary Opens a dialog displaying detailed information about the selected movie.
+   * @param {any} movie - The movie object containing movie details.
+   * @returns {void}
+   */
   openMovie(movie: any): void {
     if (!movie || !movie.title) {
       console.error('Invalid movie data:', movie);
@@ -97,7 +155,11 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // Remove from favourites
+  /**
+   * @summary Removes a movie from the user's favorite list.
+   * @param {string} movieID - The ID of the movie to be removed from favorites.
+   * @returns {void}
+   */
   removeFromFavorites(movieID: string): void {
     const username = this.fetchApiData.getUsername();
     if (!username) {
@@ -120,7 +182,10 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // Update user profile
+  /**
+   * @summary Updates the user's profile with new information.
+   * @returns {void}
+   */
   updateUserProfile(): void {
     const username = this.fetchApiData.getUsername();
     if (!username) {
@@ -189,7 +254,10 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // Delete Profile
+  /**
+   * @summary Deletes the user's account and clears their data from local storage.
+   * @returns {void}
+   */
   deleteAccount(): void {
     if (
       confirm(
@@ -216,7 +284,11 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  // Format birthday date (YYYY-MM-DD)
+  /**
+   * @summary Formats the given date string into the YYYY-MM-DD format.
+   * @param {string | null} dateString - The date string to format.
+   * @returns {string | null} The formatted date string or null if input is invalid.
+   */
   formatDate(dateString: string | null): string | null {
     if (!dateString) return null;
     const date = new Date(dateString);
