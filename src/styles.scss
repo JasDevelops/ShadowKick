@@ -1,16 +1,26 @@
 @use "@angular/material" as mat;
 
+$primary-color: mat.$cyan-palette;
+$accent-color: #ed217c;
+$highlight-color: #fffb46;
+$text-light: #fff;
+$text-dark: #000;
+
+// Font Variables
+$font-primary: "Montserrat", sans-serif;
+$font-secondary: "Fugaz One", serif;
+
 // Enable Dark Mode
 html {
   color-scheme: dark;
   @include mat.theme(
     (
       color: (
-        primary: mat.$cyan-palette,
+        primary: $primary-color,
       ),
       typography: (
-        plain-family: Montserrat,
-        brand-family: Fugaz One,
+        plain-family: $font-primary,
+        brand-family: $font-secondary,
       ),
       density: 0,
     )
@@ -19,7 +29,7 @@ html {
 
 // Typography & Global Styles
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: $font-primary;
   text-align: center;
 }
 
@@ -27,7 +37,7 @@ h1,
 h2,
 h3,
 .list_label {
-  font-family: "Fugaz One", serif;
+  font-family: $font-secondary;
   text-transform: uppercase;
 }
 
@@ -35,22 +45,35 @@ h2 {
   margin: 50px 0;
 }
 
+// Mixins
+@mixin shadow-text($color, $size) {
+  text-shadow: $size $size 0 $color;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 // Branding & Logo
 .logo {
   margin: 0 auto;
   text-transform: uppercase;
-  text-shadow: 6px 6px 0 #000;
+  @include shadow-text($text-dark, 6px);
   font-size: 24px;
-  color: #fff;
+  color: $text-light;
 
   span {
-    color: #fffb46;
+    color: $highlight-color;
+  }
+
+  &.main-page {
+    display: block;
+    font-size: 40px;
   }
 }
-.main-page .logo {
-  display: block;
-  font-size: 40px;
-}
+
 // Tabs & Forms
 .tab-container {
   max-width: 400px;
@@ -65,21 +88,30 @@ h2 {
 mat-form-field {
   width: 100%;
   margin-bottom: 15px;
+
+  &:focus-within mat-icon {
+    opacity: 0.5;
+    transition: opacity 0.2s ease-in-out;
+  }
 }
 
 // Descriptions & Clickables
 .descr {
   line-height: 1.8;
+
   p {
     padding: 20px 0;
   }
 }
+
 .space {
   line-height: 200%;
 }
+
 .clickable {
   cursor: pointer;
-  color: var(--mat-sys-inverse-primary);
+  color: var(--mat-sys-secondary-fixed-dim);
+  transition: opacity 0.2s ease-in-out;
 
   &:hover {
     opacity: 0.5;
@@ -97,9 +129,7 @@ mat-form-field {
   margin: 0;
 
   li {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-center;
     padding: 5px;
   }
 }
@@ -117,18 +147,17 @@ mat-form-field {
 }
 
 // Buttons & Icons
-mat-form-field:focus-within mat-icon {
-  opacity: 0.5;
-  transition: opacity 0.2s ease-in-out;
-}
 .mat-icon {
   font-size: 20px;
+  height: 20px !important;
+  width: 20px !important;
 }
-body .sad_btn {
+
+.sad_btn {
   font-size: 50px;
   height: 50px;
   width: 50px;
-  color: #ed217c;
+  color: $accent-color;
 }
 
 .tab-icon {
@@ -138,15 +167,16 @@ body .sad_btn {
 button.btn-icon {
   margin-left: 5px;
 }
-body .profile .delete-button {
+
+// Profile & Delete Button
+.profile .delete-button {
   margin-top: 20px;
-  border-color: #ed217c;
-  color: #ed217c;
+  border-color: $accent-color;
+  color: $accent-color;
 }
+
 .delete-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   padding: 5px;
   cursor: pointer;
   transition:
@@ -155,11 +185,11 @@ body .profile .delete-button {
   margin-left: auto;
 
   mat-icon {
-    color: #ed217c;
+    color: $accent-color;
   }
 
   &:hover {
     transform: scale(1.2);
-    color: #ed217c;
+    color: $accent-color;
   }
 }

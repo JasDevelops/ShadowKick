@@ -1,43 +1,70 @@
+// Variables
+$drawer-width: 250px;
+$placeholder-width: 48px;
+$spacing-sm: 16px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Layout Styles
 .sidenav-container {
   height: 100vh;
 }
+
 .sidenav {
-  width: 250px;
+  width: $drawer-width;
 }
+
 .drawer-content {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
+
+// Toolbar
 .toolbar {
+  @include flex-space-between;
+  padding: 0 $spacing-sm;
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 16px;
 }
+
+// Menu Items
 .menu-items {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
+  @include flex-center;
+  gap: $spacing-sm;
+
+  button.active {
+    opacity: 0.5;
+  }
 }
-.menu-items button.active {
-  opacity: 0.5;
-}
+
+// Drawer Header
 .drawer-header {
   display: flex;
   justify-content: flex-end;
   width: 100%;
 }
 
-.left-placeholder {
-  width: 48px;
-}
+// Placeholders
+.left-placeholder,
 .right-placeholder {
-  width: 48px;
+  width: $placeholder-width;
+}
+
+.right-placeholder {
   display: flex;
   justify-content: flex-end;
 }

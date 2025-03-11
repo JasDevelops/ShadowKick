@@ -1,41 +1,72 @@
-.movies-container {
+$grid-gap: 30px;
+$movie-card-min-width: 280px;
+$movie-card-max-width: 1200px;
+$movie-card-max-height: 600px;
+$media-height: 300px;
+$spacing-lg: 50px;
+$spacing-md: 20px;
+$icon-color: #ed217c;
+
+// Mixins
+@mixin grid-layout($min-width, $gap) {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax($min-width, 1fr));
+  gap: $gap;
   justify-content: center;
   align-content: start;
-  max-width: 1200px;
-  margin: 50px auto;
 }
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Movies Container
+.movies-container {
+  @include grid-layout($movie-card-min-width, $grid-gap);
+  max-width: $movie-card-max-width;
+  margin: $spacing-lg auto;
+}
+
+// Movie Card
 .movie-card {
   width: 100%;
   height: 100%;
-  max-height: 600px;
-  display: flex;
-  flex-direction: column;
+  max-height: $movie-card-max-height;
+  @include flex-column;
   justify-self: center;
 }
+
+// Media Image Styling
 .mdc-card__media {
-  height: 300px;
+  height: $media-height;
   max-width: 90%;
   object-fit: cover;
   display: block;
   margin: 0 auto;
 }
+
+// Card Header
 mat-card-header {
   min-height: 100px;
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
   justify-content: flex-start;
   text-align: center;
 }
+
+// Card Actions
 mat-card-actions {
-  margin-top: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
+  @include flex-space-between;
+  margin-top: $spacing-md;
 }
+
+// Icons
 mat-icon {
-  color: #ed217c;
+  color: $icon-color;
 }
