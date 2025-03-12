@@ -44,7 +44,9 @@ h3,
 h2 {
   margin: 50px 0;
 }
-
+h1 .logo {
+  display: block;
+}
 // Mixins
 @mixin shadow-text($color, $size) {
   text-shadow: $size $size 0 $color;
