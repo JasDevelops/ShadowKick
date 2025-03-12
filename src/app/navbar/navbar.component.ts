@@ -62,6 +62,7 @@ export class NavbarComponent implements OnInit, DoCheck, OnDestroy {
    * @property {Subscription} routerSub - Subscription for router events.
    */
   private routerSub!: Subscription;
+
   constructor(
     public router: Router, // Router for navigation
     private cdr: ChangeDetectorRef, // Change detector for performance optimization
@@ -73,11 +74,12 @@ export class NavbarComponent implements OnInit, DoCheck, OnDestroy {
    */
   ngOnInit() {
     this.checkAuthStatus();
+
     this.routerSub = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        this.showNavbar = event.url !== '/welcome'; // Show navbar on routes other than /welcome
-        this.cdr.markForCheck(); // Mark the component for change detection
+        this.showNavbar = !event.url.startsWith('/welcome'); // Show navbar on routes other than /welcome
+        this.cdr.detectChanges(); // Detect the component for change detection
       });
   }
 
