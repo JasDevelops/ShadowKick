@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common'; // for *ngIf
 import { MatButtonModule } from '@angular/material/button';
 import { UserRegistrationFormComponent } from '../user-registration-form/user-registration-form.component';
 import { UserLoginFormComponent } from '../user-login-form/user-login-form.component';
+import { ChangeDetectorRef } from '@angular/core';
 
 /**
  * @summary This component represents the welcome page of the application. It handles user registration, login, and redirects the user based on their authentication and registration status.
@@ -51,7 +52,10 @@ export class WelcomePageComponent {
    */
   selectedTabIndex = 0;
 
-  constructor(private router: Router) {} // For navigation
+  constructor(
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {} // For navigation
 
   /**
    * @summary Checks the user's authentication and registration status when the component initializes.
@@ -66,6 +70,7 @@ export class WelcomePageComponent {
     } else if (!this.isRegistered) {
       this.selectedTabIndex = 1; // Switch to Signup tab if user is not registered
     }
+    this.cdr.detectChanges();
   }
 
   /**
@@ -74,6 +79,7 @@ export class WelcomePageComponent {
    */
   checkAuthStatus(): void {
     this.isLoggedIn = !!localStorage.getItem('token');
+    this.cdr.detectChanges();
   }
 
   /**
@@ -82,6 +88,7 @@ export class WelcomePageComponent {
    */
   checkRegistrationStatus(): void {
     this.isRegistered = localStorage.getItem('isRegistered') === 'true';
+    this.cdr.detectChanges();
   }
 
   /**
@@ -106,6 +113,7 @@ export class WelcomePageComponent {
     this.isRegistered = true;
     localStorage.setItem('isRegistered', 'true');
     this.selectedTabIndex = 0; // Switch to Login tab after successful signup
+    this.cdr.detectChanges();
   }
 
   /**
@@ -119,5 +127,7 @@ export class WelcomePageComponent {
     this.isLoggedIn = false;
     this.isRegistered = false;
     this.checkAuthStatus();
+    this.cdr.detectChanges();
+    this.router.navigate(['/welcome']);
   }
 }
