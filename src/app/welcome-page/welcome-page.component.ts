@@ -18,6 +18,7 @@ import { UserLoginFormComponent } from '../user-login-form/user-login-form.compo
 
 @Component({
   selector: 'app-welcome-page',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
